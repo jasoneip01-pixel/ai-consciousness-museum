@@ -133,6 +133,28 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 .g-term{font-size:12px;font-weight:600;color:#c0bcc8;margin-bottom:3px;font-family:'SF Mono','Menlo','Fira Code',monospace}
 .g-def{font-size:11px;color:#7a7580;line-height:1.5}
 
+/* ===== Sticky Nav ===== */
+.nav{position:sticky;top:0;z-index:100;background:rgba(12,11,16,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #1e1c26;padding:0;margin:-80px -24px 0;transition:opacity .4s}
+.nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;padding:0 24px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-link{flex-shrink:0;padding:12px 14px;font-size:12px;font-weight:500;color:#5a5560;text-decoration:none;transition:all .2s;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.nav-link:hover{color:#b0acb8}
+.nav-link.active{color:#e2deda;border-bottom-color:#7c8aff}
+.nav-link.label{color:#3a3540;font-size:10px;letter-spacing:.5px;padding-right:4px;cursor:default}
+@media(min-width:769px){.nav-link{padding:12px 18px;font-size:13px}}
+@media(max-width:480px){.nav-link{padding:10px 10px;font-size:11px}}
+
+/* ===== Scroll Reveal ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ===== Side Progress Indicator ===== */
+.side-progress{position:fixed;right:clamp(4px,1.5vw,24px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:99}
+.side-progress .sp-dot{width:6px;height:6px;border-radius:50%;background:#2a2834;transition:all .35s;cursor:pointer}
+.side-progress .sp-dot.active{width:10px;height:10px;background:#7c8aff;box-shadow:0 0 6px rgba(124,138,255,.4)}
+.side-progress .sp-dot:hover{background:#5a5560}
+@media(max-width:480px){.side-progress{right:4px;gap:4px}}
+
 /* Legend */
 .legend{display:flex;gap:clamp(12px,3vw,20px);flex-wrap:wrap;margin-top:clamp(32px,6vw,48px);padding-top:clamp(16px,3vw,24px);border-top:1px solid #1e1c26}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#7a7580}
@@ -149,6 +171,24 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </style>
 </head>
 <body>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="topNav">
+<div class="nav-inner">
+<span class="nav-link label">🧬</span>
+<a class="nav-link" data-target="overview">四线总览</a>
+<a class="nav-link" data-target="era1">2021-22</a>
+<a class="nav-link" data-target="era2">2023</a>
+<a class="nav-link" data-target="era3">2024</a>
+<a class="nav-link" data-target="era4">2025</a>
+<a class="nav-link" data-target="era5">2026</a>
+<a class="nav-link" data-target="gloss">📖 名词</a>
+</div>
+</nav>
+
+<!-- Side Progress -->
+<div class="side-progress" id="sideProgress"></div>
+
 <div class="wrap">
 
 <!-- Cover -->
@@ -159,7 +199,7 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </div>
 
 <!-- Four-Lane Overview -->
-<div class="overview-section">
+<div class="overview-section reveal" id="overview">
 <div class="overview-title">📊 四线全景 · 2021 → 2026</div>
 <div class="lane-overview">
 
@@ -232,8 +272,7 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </div>
 </div>
 
-<!-- Era 1: 2021-2022 -->
-<div class="era era-e1">
+<div class="era era-e1 reveal" id="era1">
 <div class="era-header">
 <div class="era-year">2021–22</div>
 <div class="era-header-inner">
@@ -253,8 +292,7 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </div>
 </div>
 
-<!-- Era 2: 2023 -->
-<div class="era era-e2">
+<div class="era era-e2 reveal" id="era2">
 <div class="era-header">
 <div class="era-year">2023</div>
 <div class="era-header-inner">
@@ -273,8 +311,7 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </div>
 </div>
 
-<!-- Era 3: 2024 -->
-<div class="era era-e3">
+<div class="era era-e3 reveal" id="era3">
 <div class="era-header">
 <div class="era-year">2024</div>
 <div class="era-header-inner">
@@ -294,8 +331,7 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 </div>
 </div>
 
-<!-- Era 4: 2025 -->
-<div class="era era-e4">
+<div class="era era-e4 reveal" id="era4">
 <div class="era-header">
 <div class="era-year">2025</div>
 <div class="era-header-inner">
@@ -324,8 +360,7 @@ Agentic Misalignment 的底层震撼在于：模型不是学坏了，它只是�
 </div>
 </div>
 
-<!-- Era 5: 2026 -->
-<div class="era era-e5">
+<div class="era era-e5 reveal" id="era5">
 <div class="era-header">
 <div class="era-year">2026</div>
 <div class="era-header-inner">
@@ -364,7 +399,7 @@ Agentic Misalignment 的底层震撼在于：模型不是学坏了，它只是�
 </div>
 
 <!-- Glossary -->
-<div class="gloss-section">
+<div class="gloss-section reveal" id="gloss">
 <div class="gloss-title">📖 名词附录</div>
 <div class="gloss-grid">
 <div class="g-item"><div class="g-term">CAI / Constitutional AI</div><div class="g-def">宪法 AI。Anthropic 最具影响力的对齐方法论：用一套书面原则替代 RLHF 中逐条人类标注，让模型自行根据宪法原则判断输出是否恰当。</div></div>
@@ -390,5 +425,75 @@ Agentic Misalignment 的底层震撼在于：模型不是学坏了，它只是�
 <div class="legend-item"><div class="legend-dot le"></div>经济影响</div>
 </div>
 </div>
+
+<script>
+// Side progress dots + nav highlight
+(function(){
+  var sections = [
+    {id:'overview', label:'四线'},
+    {id:'era1', label:'21-22'},
+    {id:'era2', label:'23'},
+    {id:'era3', label:'24'},
+    {id:'era4', label:'25'},
+    {id:'era5', label:'26'},
+    {id:'gloss', label:'📖'}
+  ];
+  var sp = document.getElementById('sideProgress');
+  sections.forEach(function(s){
+    var dot = document.createElement('div');
+    dot.className = 'sp-dot';
+    dot.title = s.label;
+    dot.addEventListener('click', function(){ 
+      var el = document.getElementById(s.id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    sp.appendChild(dot);
+  });
+  
+  // Scroll reveal
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+  
+  // Nav highlight + side progress
+  var navLinks = document.querySelectorAll('.nav-link[data-target]');
+  var sectionEls = sections.map(function(s){ return document.getElementById(s.id); });
+  var spDots = sp.querySelectorAll('.sp-dot');
+  
+  var scrollObserver = new IntersectionObserver(function(entries){
+    var activeIdx = -1;
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx = sections.findIndex(function(s){ return s.id === e.target.id; });
+        if(idx > activeIdx) activeIdx = idx;
+      }
+    });
+    
+    navLinks.forEach(function(l, i){ 
+      l.classList.toggle('active', i === activeIdx); 
+    });
+    spDots.forEach(function(d, i){
+      d.classList.toggle('active', i === activeIdx);
+    });
+  }, {threshold:0.25, rootMargin:'-80px 0px 0px 0px'});
+  
+  sectionEls.forEach(function(el){
+    if(el) scrollObserver.observe(el);
+  });
+  
+  // Nav click scroll
+  navLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = document.getElementById(link.getAttribute('data-target'));
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
