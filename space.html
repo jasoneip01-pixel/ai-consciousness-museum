@@ -68,12 +68,12 @@ body::before{content:'';position:fixed;inset:0;z-index:-2;
 /* EMBEDDING VISUAL */
 .embed{text-align:center}
 .embed .word-display{font-size:clamp(20px,3vw,28px);font-weight:700;margin:10px 0;color:#d4954a}
-.embed .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-width:320px;margin:12px auto}
-.embed .grid .g{aspect-ratio:1;border-radius:2px;transition:all .2s;opacity:0;background:rgba(184,115,51,.3)}
+.embed .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-width:320px;margin:12px auto;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.04);border-radius:4px;padding:4px}
+.embed .grid .g{aspect-ratio:1;border-radius:2px;transition:all .4s;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.03)}
 .embed .grid .g.lit{opacity:.6}.embed .grid .g.bright{opacity:1}.embed .grid .g.dim{opacity:.15}
 .embed .scan-btn{display:inline-block;padding:8px 20px;border-radius:20px;border:1px solid #b87333;
   color:#b87333;font-size:13px;font-weight:600;cursor:pointer;background:transparent;font-family:inherit;transition:all .2s}
-.embed .scan-btn:hover{background:rgba(184,115,51,.15)}
+.embed .scan-btn:hover{background:rgba(184,115,51,.2);border-color:#d4954a;color:#d4954a}
 
 /* PLANET VIEW */
 .planet-view{text-align:center;padding:clamp(16px,2vw,24px) 0}
@@ -229,7 +229,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-2;
       <div class="lbl" style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.2);margin-bottom:8px">📡 传感器 · 文字→数字</div>
       <div class="word-display">"黑洞是什么？"</div>
       <div class="grid" id="embedGrid"></div>
-      <p style="font-size:clamp(10px,1vw,12px);color:rgba(255,255,255,.2);margin-top:6px">文字 → 数字 → 向量（每个点 = 一个维度）</p>
+      <p style="font-size:clamp(10px,1vw,12px);color:rgba(255,255,255,.35);margin-top:6px">文字 → 数字 → 向量（每个点 = 一个维度）</p>
       <button class="scan-btn" onclick="scanEmbed()">📡 扫描输入层</button>
     </div>
 
@@ -322,7 +322,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-2;
           <div class="a"><div class="a-icon">💰</div><div class="a-lbl">货币</div><div class="a-val" id="ac4">Euro</div></div>
         </div>
         <button class="c-btn" onclick="causalFlip()">🌍 France → China</button>
-        <p style="font-size:clamp(10px,1vw,12px);color:rgba(255,255,255,.2);margin-top:6px" id="causalNote">改 J-space 一个概念 → 四个输出同时变</p>
+        <p style="font-size:clamp(10px,1vw,12px);color:rgba(255,255,255,.35);margin-top:6px" id="causalNote">改 J-space 一个概念 → 四个输出同时变</p>
       </div>
     </div>
 
@@ -513,7 +513,7 @@ function scanEmbed(){
   for(let i=0;i<64;i++){
     const c=document.createElement('div');
     c.className='g'+(Math.random()>0.7?' dim':'');
-    c.style.opacity=Math.random()*0.08;
+    c.style.opacity=Math.random()*0.15+0.12;
     grid.appendChild(c);
   }
 })();
