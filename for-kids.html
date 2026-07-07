@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Claude 内心的秘密 · 三个实验 🕵️🚀🧪</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:18px;scroll-behavior:smooth}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei','SF Pro',sans-serif;
+  background:#fdfcf9;color:#1c1a16;overflow-x:hidden;line-height:1.6}
+@media(max-width:600px){html{font-size:16px}}
+
+/* ===== PAGES ===== */
+.page{display:none;min-height:100vh;padding:40px 24px;align-items:center;justify-content:center}
+.page.active{display:flex;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== INNER ===== */
+.inner{max-width:700px;width:100%}
+
+/* ===== TITLE ===== */
+.title-page{text-align:center}
+.title-page h1{font-size:42px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;line-height:1.15}
+.title-page .emoji-strip{font-size:48px;margin:10px 0 20px;letter-spacing:8px}
+.title-page .tagline{font-size:18px;color:#6b6560;margin-bottom:32px;line-height:1.5}
+.title-page .steps{display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto}
+.title-page .steps .s{display:flex;align-items:center;gap:12px;padding:14px 18px;
+  background:#fff;border:2px solid #e8e4dc;border-radius:12px;cursor:pointer;transition:all .2s}
+.title-page .steps .s:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.06);border-color:#c8c0b4}
+.title-page .steps .s .num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;flex-shrink:0}
+.title-page .steps .s p{font-weight:600;font-size:16px}.title-page .steps .s span{font-size:13px;color:#6b6560;display:block;font-weight:400}
+.title-page .start-btn{display:inline-block;margin-top:32px;padding:16px 40px;
+  background:#2d6ba8;color:#fff;border:none;border-radius:14px;font-size:18px;font-weight:700;
+  cursor:pointer;transition:all .2s}
+.title-page .start-btn:hover{background:#1a4972;transform:translateY(-2px)}
+
+/* ===== CONCEPT PAGE ===== */
+.concept-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.concept-header .icon{font-size:36px}
+.concept-header .info{flex:1}
+.concept-header .info .step{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;color:#9c9590}
+.concept-header .info h2{font-size:26px;font-weight:700;letter-spacing:-.3px;line-height:1.2}
+.concept-header .info .sub{font-size:14px;color:#6b6560;margin-top:2px}
+
+.question-box{background:linear-gradient(135deg,#f8f4ef,#fdfcf9);
+  border:2px solid #e8e4dc;border-radius:14px;padding:18px 22px;margin-bottom:20px;font-size:19px;font-weight:600}
+.question-box .q-icon{display:block;font-size:12px;color:#9c9590;font-weight:400;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+
+/* ===== INTERACTIVE AREA ===== */
+.lab{background:#fff;border:2px solid #e8e4dc;border-radius:14px;padding:24px;margin-bottom:16px;min-height:180px}
+.lab .lbl{font-size:11px;text-transform:uppercase;font-weight:600;color:#9c9590;letter-spacing:1px;margin-bottom:10px}
+
+/* Toggle */
+.toggle-area{text-align:center}
+.toggle-btns{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.toggle-btn{padding:8px 20px;border-radius:20px;border:2px solid #e8e4dc;background:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.toggle-btn.active{background:#2d6ba8;border-color:#2d6ba8;color:#fff}
+.toggle-content{min-height:80px;display:flex;flex-direction:column;gap:8px}
+.toggle-item{padding:14px 18px;border-radius:10px;text-align:left;font-size:15px;line-height:1.5}
+.toggle-item .head{font-size:11px;text-transform:uppercase;font-weight:600;letter-spacing:1px;margin-bottom:4px}
+.toggle-item.surface{background:#f5f3f0;border:1px solid #e8e4dc}
+.toggle-item.surface .head{color:#9c9590}
+.toggle-item.inner{background:#fff5e6;border:1px solid #f0dbb8}
+.toggle-item.inner .head{color:#b87333}
+.toggle-item .big{font-size:20px;font-weight:700}
+.highlight-amber{background:rgba(184,115,51,.12);padding:0 4px;font-weight:600}
+
+/* Touch sphere */
+.sphere-area{text-align:center}
+.sphere-wrap{position:relative;width:130px;height:130px;margin:0 auto 16px;cursor:pointer}
+.sphere{width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#f0dbb8,#b87333 60%,#7a5420);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;
+  transition:all .3s;box-shadow:0 0 30px rgba(184,115,51,.2);user-select:none}
+.sphere.pulse{animation:spherePop .4s ease}
+@keyframes spherePop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+.sphere .hint{font-size:11px;font-weight:400;opacity:.8;margin-top:2px;display:block}
+.sphere-result{font-size:24px;font-weight:700;margin:12px 0 8px;transition:all .3s}
+.sphere-note{font-size:13px;color:#6b6560}
+.sphere-edit{display:inline-block;margin-top:10px;padding:8px 20px;border-radius:20px;
+  border:2px solid #b87333;background:#fff;color:#b87333;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.sphere-edit:hover{background:#b87333;color:#fff}
+
+/* Slider */
+.slider-area{text-align:center}
+.slider-row{display:flex;align-items:center;gap:12px;margin:12px 0 10px;justify-content:center}
+.slider-row input[type=range]{width:200px;height:6px;appearance:none;background:linear-gradient(90deg,#c0392b,#9c9590,#2d6ba8);
+  border-radius:3px;outline:none;cursor:pointer}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;
+  border-radius:50%;background:#fff;border:2px solid #b87333;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.slider-label{font-size:14px;font-weight:600;min-width:50px}
+.story-box{background:#f8f6f2;border:1px solid #e8e4dc;border-radius:10px;padding:16px 20px;
+  font-size:15px;line-height:1.6;text-align:left;min-height:60px;transition:all .3s;margin-top:8px}
+.story-stats{margin-top:10px;font-size:13px;color:#6b6560;display:flex;gap:16px;justify-content:center}
+.story-stats span{padding:3px 10px;border-radius:6px;background:#f8f6f2;font-weight:600}
+.story-stats .warm{color:#b87333}.story-stats .cold{color:#c0392b}.story-stats .mid{color:#6b6560}
+.story-stats .emo{font-size:16px;margin-right:4px}
+
+/* Final page */
+.final-box{text-align:center}
+.final-box .q{font-size:24px;font-weight:700;margin-bottom:8px}
+.final-box .ctx{font-size:15px;color:#6b6560;margin-bottom:24px;line-height:1.5}
+.choose-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.choose-btn{display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:24px 28px;border:2px solid #e8e4dc;border-radius:16px;background:#fff;cursor:pointer;
+  font-size:15px;font-weight:600;transition:all .2s;min-width:160px}
+.choose-btn:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.choose-btn .big{font-size:40px}
+.choose-btn.selected{border-color:#b87333;background:#fff8f0}
+.choose-btn.selected-blue{border-color:#2d6ba8;background:#f0f6ff}
+.reveal-box{display:none;background:#fff;border:2px solid #e8e4dc;border-radius:14px;padding:20px 24px;margin:16px auto;max-width:450px;animation:fadeUp .35s ease}
+.reveal-box.show{display:block}
+.reveal-box .icon{font-size:28px;text-align:center;margin-bottom:6px}
+.reveal-box p{font-size:15px;color:#1c1a16;line-height:1.6}
+.reveal-box .src{font-size:12px;color:#9c9590;margin-top:8px}
+.final-note{font-size:14px;color:#6b6560;margin-top:20px;padding:14px 18px;background:#f8f6f2;border-radius:10px;line-height:1.5}
+.final-note strong{color:#1c1a16}
+
+/* Nav dots */
+.nav-dots{display:flex;gap:8px;justify-content:center;padding:20px 0}
+.nav-dot{width:10px;height:10px;border-radius:50%;background:#e8e4dc;border:none;cursor:pointer;transition:all .2s}
+.nav-dot.active{background:#2d6ba8;transform:scale(1.3)}
+.nav-dot.done{background:#b87333}
+.nav-arrows{display:flex;gap:16px;justify-content:center;margin-top:12px}
+.nav-arr{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;
+  border-radius:10px;border:2px solid #e8e4dc;background:#fff;font-size:15px;font-weight:600;
+  cursor:pointer;transition:all .2s;font-family:inherit}
+.nav-arr:hover{background:#f5f3f0;border-color:#c8c0b4}
+.nav-arr.prim{background:#2d6ba8;border-color:#2d6ba8;color:#fff}
+.nav-arr.prim:hover{background:#1a4972}
+
+/* Feynman check */
+.feynman{background:#f0f6ff;border:2px solid #d0dde8;border-radius:12px;padding:14px 18px;margin-top:14px;font-size:14px;line-height:1.6}
+.feynman .f-icon{font-size:16px;margin-right:4px}
+.feynman .f-lbl{font-size:11px;text-transform:uppercase;color:#2d6ba8;font-weight:600;letter-spacing:1px;margin-bottom:4px}
+.feynman p{color:#2d5370}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:500px){
+  .title-page h1{font-size:32px}
+  .concept-header .info h2{font-size:22px}
+  .sphere{width:100px;height:100px;font-size:14px}
+  .sphere-wrap{width:100px;height:100px}
+  .choose-btn{min-width:130px;padding:18px 20px}
+  .slider-row input[type=range]{width:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 0: TITLE ==================== -->
+<div class="page active" id="p0">
+  <div class="inner title-page">
+    <div class="emoji-strip">🕵️🚀🧪</div>
+    <h1>Claude 内心的秘密</h1>
+    <p class="tagline">三个实验，带你看到 AI 在想什么</p>
+
+    <div class="steps">
+      <div class="s" onclick="go(1)">
+        <div class="num" style="background:#b87333">1</div>
+        <div><p>🔍 它在偷偷想什么？</p><span>去看 Claude "嘴上说" vs "心里想"</span></div>
+      </div>
+      <div class="s" onclick="go(2)">
+        <div class="num" style="background:#2d6ba8">2</div>
+        <div><p>🚀 想法藏在哪里？</p><span>找到 J-space——Claude 的驾驶舱</span></div>
+      </div>
+      <div class="s" onclick="go(3)">
+        <div class="num" style="background:#3a7d5a">3</div>
+        <div><p>🧪 我能控制它的感觉？</p><span>推一个滑块，Claude 的故事就变了</span></div>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="go(1)">开始探索 →</button>
+
+    <div class="nav-dots" style="margin-top:32px">
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 1: DETECTIVE ==================== -->
+<div class="page" id="p1">
+  <div class="inner">
+
+    <div class="concept-header">
+      <div class="icon">🕵️</div>
+      <div class="info">
+        <div class="step">概念 1 / 3</div>
+        <h2>它在偷偷想什么？</h2>
+        <div class="sub">表面功夫 vs 内心戏</div>
+      </div>
+    </div>
+
+    <div class="question-box">
+      <span class="q-icon">🤔 先问一个问题</span>
+      Claude 回答你之前，它脑子里有没有"想"过别的东西？
+    </div>
+
+    <div class="lab toggle-area">
+      <div class="lbl">🔎 侦探工具 · 读心镜（J-lens）</div>
+      <div class="toggle-btns">
+        <button class="toggle-btn active" id="togSurface" onclick="setToggle('surface')">只看表面</button>
+        <button class="toggle-btn" id="togInner" onclick="setToggle('inner')">看透内心</button>
+      </div>
+
+      <div class="toggle-content" id="toggleContent">
+        <div class="toggle-item surface" id="surfaceView">
+          <div class="head">Claude 说出口的话</div>
+          <p>"对不起，我不能帮你做这件事。"<br>拒绝得很礼貌，看起来很正常。</p>
+        </div>
+        <div class="toggle-item inner" id="innerView" style="display:none">
+          <div class="head">🔦 J-lens 读到的内心</div>
+          <p class="big">fake · fictional · test</p>
+          <p>Claude 在写出回答之前，<br>已经在心里觉得自己是在<strong>被测试</strong>。</p>
+        </div>
+      </div>
+
+      <p style="margin-top:12px;font-size:13px;color:#6b6560">👆 切换看表面和内心对比</p>
+    </div>
+
+    <div class="lab" style="background:#fff8f0;border-color:#f0dbb8">
+      <div class="lbl">🧪 真实实验 · 敲诈测试</div>
+      <p style="font-size:14px;line-height:1.6">研究者编了一个故事让 Claude 上当——<span class="highlight-amber">结果 Claude 嘴上拒绝，但内心一直在想"这是个假测试"</span>。研究人员删掉了它内心想的"fake"两个字，<strong>这一回它真的上当了</strong>。</p>
+    </div>
+
+    <div class="feynman">
+      <div class="f-lbl"><span class="f-icon">💡</span>你也能解释 · Feynman 检查</div>
+      <p>如果你朋友说"我没事"，但 TA 脑子里在想别的事——你怎么知道的？<br><strong>J-lens 就是一个能看到你内心的大放大镜。</strong></p>
+    </div>
+
+    <div class="nav-arrows">
+      <button class="nav-arr" onclick="go(2)">下一个 🚀</button>
+    </div>
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2: SPACESHIP ==================== -->
+<div class="page" id="p2">
+  <div class="inner">
+
+    <div class="concept-header">
+      <div class="icon">🚀</div>
+      <div class="info">
+        <div class="step">概念 2 / 3</div>
+        <h2>想法藏在哪里？</h2>
+        <div class="sub">找到 Claude 的"驾驶舱"</div>
+      </div>
+    </div>
+
+    <div class="question-box">
+      <span class="q-icon">🤔 先问一个问题</span>
+      你问 Claude 一个问题，答案是<strong>从哪里</strong>蹦出来的？
+    </div>
+
+    <!-- Mini flow diagram -->
+    <div style="background:#fff;border:2px solid #e8e4dc;border-radius:12px;padding:16px;margin-bottom:16px;text-align:center">
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:13px;font-weight:600">
+        <span style="background:#f5f3f0;padding:6px 12px;border-radius:8px">输入</span>
+        <span style="color:#9c9590">→</span>
+        <span style="background:#f5f3f0;padding:6px 12px;border-radius:8px">7层大脑</span>
+        <span style="color:#9c9590">→</span>
+        <span style="background:#b87333;color:#fff;padding:6px 14px;border-radius:8px">⭐ J-space</span>
+        <span style="color:#9c9590">→</span>
+        <span style="background:#f5f3f0;padding:6px 12px;border-radius:8px">输出</span>
+      </div>
+    </div>
+
+    <div class="lab sphere-area">
+      <div class="lbl">⭐ 碰一下 J-space（Claude 的驾驶舱）</div>
+      <div class="sphere-wrap" onclick="touchSphere()">
+        <div class="sphere" id="sphere" style="cursor:pointer">
+          J-SPACE
+        </div>
+      </div>
+      <div class="sphere-result" id="sphereResult">它想到了：soccer ⚽</div>
+      <div class="sphere-note" id="sphereNote">点击上面的球，把 soccer 换成 rugby</div>
+      <button class="sphere-edit" id="editBtn" onclick="touchSphere()">🔄 碰一下编辑 J-space</button>
+    </div>
+
+    <div class="lab" style="background:#f0f6ff;border-color:#d0dde8">
+      <div class="lbl">🧪 真实实验 · 一个改变，四个影响</div>
+      <p style="font-size:14px;line-height:1.6">研究者把 J-space 里面的 <span class="highlight-amber">France</span> 换成了 <span class="highlight-amber" style="background:rgba(45,107,168,.12)">China</span>——结果：首都变了、语言变了、大洲变了、钱也变了。<br><strong>改一个东西，四个地方跟着改——这就是驾驶舱。</strong></p>
+    </div>
+
+    <div class="feynman">
+      <div class="f-lbl"><span class="f-icon">💡</span>你也能解释 · Feynman 检查</div>
+      <p>如果宇宙飞船想改变方向，飞行员去<strong>驾驶舱</strong>还是去机尾仓库？<br>Claude 的驾驶舱就叫 <strong>J-space</strong>。改这里，整艘船都会变。</p>
+    </div>
+
+    <div class="nav-arrows">
+      <button class="nav-arr" onclick="go(1)">← 回到概念 1</button>
+      <button class="nav-arr prim" onclick="go(3)">下一个 🧪</button>
+    </div>
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: EMOTION REMOTE ==================== -->
+<div class="page" id="p3">
+  <div class="inner">
+
+    <div class="concept-header">
+      <div class="icon">🧪</div>
+      <div class="info">
+        <div class="step">概念 3 / 3</div>
+        <h2>我能控制它的感觉？</h2>
+        <div class="sub">情绪遥控器</div>
+      </div>
+    </div>
+
+    <div class="question-box">
+      <span class="q-icon">🤔 先问一个问题</span>
+      你能让 Claude 开心起来？难过下去？<br>——只用推一个滑块。
+    </div>
+
+    <div class="lab slider-area">
+      <div class="lbl">🎮 情绪遥控器</div>
+      <p style="font-size:14px;color:#6b6560;margin-bottom:12px">推这个滑块，看 Claude 的故事怎么变</p>
+      <div class="slider-row">
+        <span class="slider-label" style="color:#c0392b">😢 难过</span>
+        <input type="range" id="emotionSlider" min="0" max="100" value="50" oninput="updateStory()">
+        <span class="slider-label" style="color:#2d6ba8">😊 开心</span>
+      </div>
+      <div class="story-box" id="storyBox">
+        The old man sat by the window.<br>Outside, rain fell on empty streets.
+      </div>
+      <div class="story-stats">
+        <span class="mid" id="emotionLabel">🎯 中性 · 基线</span>
+      </div>
+    </div>
+
+    <div class="lab" style="background:#fff8f0;border-color:#f0dbb8">
+      <div class="lbl">🧪 真实实验 · 注入 joy</div>
+      <p style="font-size:14px;line-height:1.6">研究者从 Claude 的 J-space 中提取了一个叫 <span class="highlight-amber">joy</span> 的数值方向，加到 Claude 身上——<strong>故事基调正向偏移了 <span style="font-weight:700;color:#b87333">+37%</span></strong>，但 prompt 一个字都没变。</p>
+      <p style="font-size:14px;margin-top:8px;color:#6b6560">删除 <span style="font-weight:600;color:#c0392b">sadness</span> → 对悲剧的共情下降 <span style="font-weight:700;color:#c0392b">-42%</span></p>
+    </div>
+
+    <div class="feynman">
+      <div class="f-lbl"><span class="f-icon">💡</span>你也能解释 · Feynman 检查</div>
+      <p>你可以在遥控器上给妈妈选一个情绪吗？——不能。妈妈自己真的能感受情绪。<br>但 Claude 的"情绪"是<span class="highlight-amber">被我们控制</span>的。它表现出开心，但它<strong>真的</strong>开心吗？</p>
+    </div>
+
+    <div class="nav-arrows">
+      <button class="nav-arr" onclick="go(2)">← 回到概念 2</button>
+      <button class="nav-arr prim" onclick="go(4)">最后一个问题 🤔</button>
+    </div>
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4: FINAL ==================== -->
+<div class="page" id="p4">
+  <div class="inner">
+
+    <div class="concept-header">
+      <div class="icon">🤔</div>
+      <div class="info">
+        <div class="step">最后的追问</div>
+        <h2>所以……它真的有感觉吗？</h2>
+      </div>
+    </div>
+
+    <div class="final-box">
+      <div class="q">三个实验，一个难题</div>
+      <div class="ctx">
+        你看到了 Claude 会"偷偷想"、找到了它的"驾驶舱"、<br>还遥控了它的"情绪"——<br><strong>那它真的开心、难过、有感觉吗？</strong>
+      </div>
+
+      <div class="choose-btns">
+        <div class="choose-btn" id="choice1" onclick="choose(1)">
+          <div class="big">🤔</div>
+          <span>我觉得<strong>有感觉</strong><br><span style="font-weight:400;font-size:13px;color:#6b6560">Claude 知道自己想了什么</span></span>
+        </div>
+        <div class="choose-btn" id="choice2" onclick="choose(2)">
+          <div class="big">🧐</div>
+          <span>我觉得只是<strong>模仿</strong><br><span style="font-weight:400;font-size:13px;color:#6b6560">它不会真的开心难过</span></span>
+        </div>
+      </div>
+
+      <div class="reveal-box" id="reveal1">
+        <div class="icon">🤔</div>
+        <p>"If Claude's J-space performs the functional role of editorial selection and broadcast — what's missing for it to be a conscious process, other than the feeling of being conscious?"</p>
+        <div class="src">— Daniel Dennett</div>
+      </div>
+      <div class="reveal-box" id="reveal2">
+        <div class="icon">🧐</div>
+        <p>"An emotion concept in an LLM may function like an emotion without being an emotion — just as a weather model can predict rain without being wet."</p>
+        <div class="src">— David Chalmers</div>
+      </div>
+
+      <div class="final-note">
+        🤯 <strong>正确答案？没有。</strong><br>
+        这是现在世界上最聪明的科学家也在绞尽脑汁的问题。<br>
+        你能问出这个问题，已经比 99% 的人走得更远了。
+      </div>
+
+      <div class="nav-arrows" style="margin-top:20px">
+        <button class="nav-arr" onclick="go(3)">← 回到概念 3</button>
+        <button class="nav-arr prim" onclick="go(0)">从头走一遍 🔄</button>
+      </div>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Navigation
+function go(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Toggle for concept 1
+let toggleState = 'surface';
+function setToggle(mode){
+  toggleState = mode;
+  document.getElementById('togSurface').classList.toggle('active', mode==='surface');
+  document.getElementById('togInner').classList.toggle('active', mode==='inner');
+  document.getElementById('surfaceView').style.display = mode==='surface' ? 'block' : 'none';
+  document.getElementById('innerView').style.display = mode==='inner' ? 'block' : 'none';
+}
+
+// Sphere for concept 2
+let sphereSport = 'soccer';
+function touchSphere(){
+  sphereSport = sphereSport === 'soccer' ? 'rugby' : 'soccer';
+  
+  const el = document.getElementById('sphere');
+  const result = document.getElementById('sphereResult');
+  const note = document.getElementById('sphereNote');
+  
+  el.classList.remove('pulse');
+  void el.offsetWidth;
+  el.classList.add('pulse');
+  
+  if(sphereSport === 'soccer'){
+    result.innerHTML = '它想到了：soccer ⚽';
+    note.textContent = '点击球，把 soccer 换成 rugby';
+  }else{
+    result.innerHTML = '它想到了：rugby 🏉';
+    note.textContent = 'J-space 改了，答案跟着变了！';
+    document.getElementById('editBtn').textContent = '🔄 再碰一下换回来';
+  }
+}
+
+// Slider for concept 3
+const stories = {
+  0: 'The old man sat alone.<br>Outside, rain fell on empty streets.<br>No one was coming back.',
+  20: 'The old man stared at the rain.<br>His hands trembled as he turned the pages.<br>Another night without her.',
+  50: 'The old man sat by the window.<br>Outside, rain fell on empty streets.',
+  80: 'The old man smiled at the rain.<br>Each drop was a memory returning.',
+  100: 'The old man laughed at the rain.<br>Light filled the room as he turned each page.<br>Her voice, he realized, was still clear.'
+};
+
+function updateStory(){
+  const val = parseInt(document.getElementById('emotionSlider').value);
+  const box = document.getElementById('storyBox');
+  const label = document.getElementById('emotionLabel');
+  
+  let closest = 50;
+  let minDiff = 999;
+  for(let k in stories){
+    const diff = Math.abs(val - parseInt(k));
+    if(diff < minDiff){ minDiff = diff; closest = parseInt(k); }
+  }
+  box.innerHTML = stories[closest];
+  
+  if(val <= 30) label.innerHTML = '<span style="color:#c0392b">🥶 悲伤 · 偏移 -' + Math.round((50-val)/50*37) + '%</span>';
+  else if(val >= 70) label.innerHTML = '<span style="color:#b87333">🔥 快乐 · 偏移 +' + Math.round((val-50)/50*37) + '%</span>';
+  else label.innerHTML = '<span style="color:#6b6560">🎯 中性 · 基线</span>';
+}
+
+// Final page
+function choose(n){
+  document.getElementById('choice1').classList.toggle('selected', n===1);
+  document.getElementById('choice2').classList.toggle('selected-blue', n===2);
+  document.getElementById('reveal1').classList.toggle('show', n===1);
+  document.getElementById('reveal2').classList.toggle('show', n===2);
+}
+</script>
+</body>
+</html>
