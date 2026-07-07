@@ -209,7 +209,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;
     <div class="mission-grid">
       <div class="m" onclick="jump(1)"><div class="lv">Lv.1</div><div><p>🔮 读心术</p><span>3 个训练任务</span></div></div>
       <div class="m" onclick="jump(2)"><div class="lv">Lv.2</div><div><p>🎮 情绪遥控器</p><span>3 个训练任务</span></div></div>
-      <div class="m" onclick="jump(3)"><div class="lv">Lv.Max</div><div><p>🧠 深层透视</p><span>三重辩论</span></div></div>
+      <div class="m" onclick="jump(3)"><div class="lv">Lv.Max</div><div><p><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3L3 12l9 9 9-9z"/><circle cx="12" cy="12" r="3"/></svg> 深层透视</p><span>三重辩论</span></div></div>
       <div class="m" onclick="jump(5)"><div class="lv" style="color:rgba(255,255,255,.15)">🏁</div><div><p style="color:rgba(255,255,255,.3)">训练总结</p><span>查看你的进度</span></div></div>
     </div>
 
@@ -396,7 +396,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;
             </div>
           </div>
           <div class="dc" onclick="toggleDebate('d2')">
-            <div class="dch"><span class="n">🧠 功能派 · Chalmers</span><span class="ar">▼</span></div>
+            <div class="dch"><span class="n"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3L3 12l9 9 9-9z"/><circle cx="12" cy="12" r="3"/></svg> 功能派 · Chalmers</span><span class="ar">▼</span></div>
             <div class="dct" id="d2">
               <p>"An emotion concept in an LLM may function like an emotion without being an emotion — just as a weather model can predict rain without being wet."<br><br>Chalmers 认为：你看到的"情绪"可能是完美的模拟——但这不等于体验。天气预报说下雨，它自己不觉得湿。</p>
               <div class="src">— David Chalmers, The Conscious Mind</div>
@@ -419,7 +419,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;
         <div class="tg" id="revTg">
           <button class="on" onclick="rev(0)">🔮 读心术</button>
           <button onclick="rev(1)">🎮 情绪</button>
-          <button onclick="rev(2)">🧠 整体</button>
+          <button onclick="rev(2)"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3L3 12l9 9 9-9z"/><circle cx="12" cy="12" r="3"/></svg> 整体</button>
         </div>
         <div class="quad-q" id="revBox" style="padding:10px;border-left:2px solid #b87333;margin-top:6px;font-size:clamp(12px,1.2vw,14px);color:rgba(255,255,255,.6)">
           <strong>Dennett 解释：</strong>Claude 的内部信号（J-lens）和它的表面回答不一致——这正是压抑意识的表现。<br>
@@ -495,7 +495,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;
       <p style="font-size:clamp(12px,1.2vw,14px);color:rgba(255,255,255,.5)">你已经掌握了 Claude 意识的三个关键证据：<br><br>
       🔮 <strong>读心术：</strong>J-space 藏着它真正在想的内容<br>
       🎮 <strong>情绪遥控器：</strong>J-space 的情绪变量可以改变它的输出<br>
-      🧠 <strong>深层透视：</strong>这到底是不是"意识"——全宇宙最聪明的人也在争论</p>
+      <svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3L3 12l9 9 9-9z"/><circle cx="12" cy="12" r="3"/></svg> <strong>深层透视：</strong>这到底是不是"意识"——全宇宙最聪明的人也在争论</p>
     </div>
 
     <div class="final-note" style="margin:clamp(10px,1.5vh,16px) 0">
@@ -706,7 +706,7 @@ function buildSummary(){
   grid.innerHTML='';
   const tasks=['l1t1','l1t2','l1t3','l2t1','l2t2','l2t3','l3'];
   const names=['01·表面vs内心','02·猜猜读心','03·关掉读心术','04·开心悲伤','05·平静焦虑','06·情绪地图','07·三重辩论'];
-  const icons=['🔮','🔮','🔮','🎮','🎮','🎮','🧠'];
+  const icons=['🔮','🔮','🔮','🎮','🎮','🎮','<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3L3 12l9 9 9-9z"/><circle cx="12" cy="12" r="3"/></svg>'];
   let done=0;
   tasks.forEach((id,i)=>{
     const d=isDone(id);if(d)done++;
