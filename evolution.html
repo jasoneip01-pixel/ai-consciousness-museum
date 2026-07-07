@@ -90,6 +90,27 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 .era-tag.e4{background:rgba(196,149,106,.15);color:#d4b080}
 .era-tag.e5{background:rgba(224,176,128,.15);color:#e0c088}
 
+/* ===== Four-Lane Overview ===== */
+.overview-section{margin-bottom:48px;padding:28px 0 20px;border-bottom:1px solid #1e1c26}
+.overview-title{font-size:14px;font-weight:600;color:#7a7580;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
+.lane-overview{display:grid;grid-template-columns:1fr;gap:14px}
+.lane-row{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start}
+.lane-icon{font-size:14px;text-align:right;padding-top:2px;font-weight:600}
+.lane-path{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.lane-step{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:12px;line-height:1.3;transition:all .15s;cursor:default}
+.lane-step:hover{filter:brightness(1.2);transform:translateY(-1px)}
+.lane-step-interpret{background:rgba(124,138,255,.08);color:#b0bcff;border:1px solid rgba(124,138,255,.15)}
+.lane-step-align{background:rgba(142,168,255,.08);color:#b8c8ff;border:1px solid rgba(142,168,255,.15)}
+.lane-step-safety{background:rgba(196,149,106,.08);color:#d4b080;border:1px solid rgba(196,149,106,.15)}
+.lane-step-economic{background:rgba(91,168,138,.08);color:#80c8a8;border:1px solid rgba(91,168,138,.15)}
+.lane-step-major{font-weight:600;padding:6px 12px}
+.lane-arr{color:#3a3540;font-size:9px;margin:0 0}
+@media(max-width:480px){
+  .lane-row{grid-template-columns:1fr;gap:4px}
+  .lane-icon{text-align:left;font-size:12px;padding-top:0}
+  .lane-step{font-size:11px;padding:4px 8px}
+}
+
 /* Empty state */
 .track-empty{font-size:11px;color:#3a3540;padding:6px 0;font-style:italic}
 
@@ -125,6 +146,80 @@ body{background:#0c0b10;color:#e2deda;font-family:-apple-system,'PingFang SC','N
 <h1>🧬 Anthropic 研究演进</h1>
 <div class="divider"></div>
 <div class="sub">2021 — 2026 · 从定义「怎么做安全的 AI」<span>→</span> 到发现「安全根本不够」</div>
+</div>
+
+<!-- Four-Lane Overview -->
+<div class="overview-section">
+<div class="overview-title">📊 四线全景 · 2021 → 2026</div>
+<div class="lane-overview">
+
+<!-- Lane 1: Interpretability -->
+<div class="lane-row">
+<div class="lane-icon lane-step-interpret" style="border:none;padding:4px 0;text-align:right;background:none">🧬 可解释性</div>
+<div class="lane-path">
+<span class="lane-step lane-step-interpret">基础方法</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-interpret">特征可视化</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-interpret">字典学习</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-interpret">NL Autoencoders</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-interpret lane-step-major">🌐 J-space</span>
+<span style="font-size:11px;color:#5a5560;margin-left:4px">从看零件 → 看想法</span>
+</div>
+</div>
+
+<!-- Lane 2: Alignment -->
+<div class="lane-row">
+<div class="lane-icon lane-step-align" style="border:none;padding:4px 0;text-align:right;background:none">🎯 对齐</div>
+<div class="lane-path">
+<span class="lane-step lane-step-align">RLAIF</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-align">HH-RLHF</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-align lane-step-major">📜 CAI</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-align lane-step-major" style="border-color:rgba(196,149,106,.4)">⚠️ Misalignment</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-align">Teaching Why</span>
+<span style="font-size:11px;color:#5a5560;margin-left:4px">约束行为 → 教会动机</span>
+</div>
+</div>
+
+<!-- Lane 3: Safety -->
+<div class="lane-row">
+<div class="lane-icon lane-step-safety" style="border:none;padding:4px 0;text-align:right;background:none">🛡️ 安全</div>
+<div class="lane-path">
+<span class="lane-step lane-step-safety">红队自动化</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-safety">RSP / ASL</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-safety lane-step-major">🚨 ASL3</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-safety">政府合作</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-safety lane-step-major">🔒 Fable 5</span>
+<span style="font-size:11px;color:#5a5560;margin-left:4px">自检 → 参与制定规则</span>
+</div>
+</div>
+
+<!-- Lane 4: Economics -->
+<div class="lane-row">
+<div class="lane-icon lane-step-economic" style="border:none;padding:4px 0;text-align:right;background:none">📊 经济影响</div>
+<div class="lane-path">
+<span class="lane-step lane-step-economic">首期指数</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-economic lane-step-major">📊 Cadences</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-economic">Agentic Coding</span>
+<span class="lane-arr">→</span>
+<span class="lane-step lane-step-economic">社科调查</span>
+<span style="font-size:11px;color:#5a5560;margin-left:4px">2025 新方向 → 2026 三连发</span>
+</div>
+</div>
+
+</div>
 </div>
 
 <!-- Era 1: 2021-2022 -->
