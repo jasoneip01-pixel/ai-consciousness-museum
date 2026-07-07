@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Claude 脑内航行 · 太空观察站 🚀</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(15px,1.6vw,18px);scroll-behavior:smooth}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei','SF Pro',sans-serif;
+  background:#0a0e1a;color:#e8e4dc;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;height:auto}
+
+/* STAR FIELD */
+body::before{content:'';position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(ellipse at 20% 50%,#0f1a3a 0%,#0a0e1a 70%,#050810 100%)}
+.stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;opacity:.6}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff}
+.star.s1{width:1px;height:1px;opacity:.4}.star.s2{width:2px;height:2px;opacity:.6}
+.star.s3{width:3px;height:3px;opacity:.9;box-shadow:0 0 4px rgba(255,255,255,.3)}
+
+/* ===== PAGES ===== */
+.page{display:none;min-height:100dvh;padding:clamp(20px,4vh,48px) clamp(12px,3vw,28px);
+  align-items:center;justify-content:center;flex-direction:column}
+.page.active{display:flex;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.inner{max-width:660px;width:100%;position:relative}
+
+/* ===== PANELS (cards on space bg) ===== */
+.panel{background:rgba(255,255,255,.04);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  padding:clamp(16px,2.5vw,28px);margin-bottom:clamp(12px,1.5vh,18px)}
+.panel.dark{background:rgba(0,0,0,.25);border-color:rgba(255,255,255,.06)}
+.panel.glow{border-color:rgba(184,115,51,.2);box-shadow:0 0 20px rgba(184,115,51,.05)}
+.panel .tag{font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:600;color:rgba(255,255,255,.3)}
+.panel h2{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.3px;line-height:1.2;margin:4px 0 6px}
+.panel .sub{font-size:clamp(13px,1.3vw,15px);color:rgba(255,255,255,.5);line-height:1.5}
+.panel p{font-size:clamp(13px,1.4vw,15px);line-height:1.6}
+
+/* ===== TITLE SCREEN ===== */
+.title-sc{text-align:center}
+.title-sc .logo{font-size:clamp(40px,7vw,64px);margin-bottom:10px}
+.title-sc h1{font-size:clamp(24px,4vw,36px);font-weight:700;letter-spacing:-.5px;line-height:1.15}
+.title-sc .dept{font-size:clamp(11px,1.1vw,13px);color:rgba(255,255,255,.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:clamp(20px,3vh,32px)}
+.title-sc .mission-list{margin:0 auto;max-width:400px;text-align:left}
+.title-sc .mission-list .m{display:flex;align-items:flex-start;gap:10px;
+  padding:clamp(10px,1.4vw,14px);margin-bottom:8px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;
+  cursor:pointer;transition:all .2s}
+.title-sc .mission-list .m:hover{background:rgba(255,255,255,.08);border-color:rgba(184,115,51,.3);transform:translateX(4px)}
+.title-sc .mission-list .m .no{color:#b87333;font-size:12px;font-weight:700;min-width:18px}
+.title-sc .mission-list .m p{font-size:clamp(13px,1.4vw,15px);font-weight:600}
+.title-sc .mission-list .m span{display:block;font-size:clamp(11px,1.1vw,12px);color:rgba(255,255,255,.35);font-weight:400}
+.title-sc .launch-btn{display:inline-block;margin-top:clamp(16px,2vh,24px);
+  padding:clamp(12px,1.6vw,16px) clamp(28px,4vw,40px);
+  background:linear-gradient(135deg,#b87333,#d4954a);color:#fff;border:none;
+  border-radius:10px;font-size:clamp(16px,1.6vw,18px);font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:inherit;letter-spacing:1px}
+.title-sc .launch-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(184,115,51,.25)}
+.title-sc .launch-btn:active{transform:translateY(0)}
+
+/* ===== FLIGHT PATH (visual journey) ===== */
+.flight{display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,14px);flex-wrap:wrap;
+  padding:clamp(12px,1.5vh,20px) 0}
+.flight .node{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.flight .node .dot{width:clamp(14px,2.5vw,22px);height:clamp(14px,2.5vw,22px);border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);transition:all .3s}
+.flight .node .dot.highlight{background:#b87333;border-color:#b87333;box-shadow:0 0 12px rgba(184,115,51,.4)}
+.flight .node .lbl{font-size:clamp(9px,1vw,11px);color:rgba(255,255,255,.35)}
+.flight .arrow{color:rgba(255,255,255,.15);font-size:clamp(14px,1.8vw,20px)}
+.flight .j-node .dot{width:clamp(22px,4vw,36px);height:clamp(22px,4vw,36px);
+  background:radial-gradient(circle at 40% 35%,#f0dbb8,#b87333 60%,#7a5420);
+  border-color:#b87333;box-shadow:0 0 20px rgba(184,115,51,.3);cursor:pointer}
+.flight .j-node .lbl{color:#b87333;font-weight:600}
+
+/* ===== PLANET DISPLAY ===== */
+.planet-view{text-align:center;padding:clamp(16px,2vw,24px) 0}
+.planet-view .ring{display:inline-block;width:clamp(100px,18vw,180px);height:clamp(100px,18vw,180px);
+  border-radius:50%;position:relative;
+  background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.06)}
+.planet-view .ring .core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:clamp(50px,9vw,90px);height:clamp(50px,9vw,90px);border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.15),rgba(255,255,255,.03));
+  display:flex;align-items:center;justify-content:center;font-size:clamp(22px,4vw,40px);cursor:pointer;
+  transition:all .3s;box-shadow:0 0 30px rgba(184,115,51,.1)}
+.planet-view .ring .core:hover{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 0 50px rgba(184,115,51,.2)}
+.planet-view .ring .core.pulse{animation:planetPulse .35s ease;transform:translate(-50%,-50%) scale(1.08)}
+@keyframes planetPulse{0%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.15)}100%{transform:translate(-50%,-50%) scale(1)}}
+.planet-view .status{font-size:clamp(16px,2vw,22px);font-weight:700;margin:10px 0 4px;color:#b87333}
+.planet-view .hint{font-size:clamp(11px,1.1vw,13px);color:rgba(255,255,255,.35)}
+
+/* ===== CONTROL PANEL (slider) ===== */
+.control{text-align:center}
+.control .row{display:flex;align-items:center;gap:clamp(6px,1vw,12px);justify-content:center}
+.control .row input[type=range]{width:clamp(100px,28vw,260px);max-width:260px;height:6px;
+  appearance:none;background:linear-gradient(90deg,#2d1b3b,#4a3a6a,#2d6ba8);
+  border-radius:3px;outline:none;cursor:pointer}
+.control .row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;
+  border-radius:50%;background:linear-gradient(135deg,#b87333,#d4954a);cursor:pointer;box-shadow:0 0 12px rgba(184,115,51,.3)}
+.control .row label{font-size:clamp(12px,1.2vw,14px);font-weight:600;min-width:36px;white-space:nowrap}
+@media(max-width:480px){.control .row{gap:6px}.control .row input[type=range]{width:100%;max-width:none}}
+.control .reader{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:8px;
+  padding:clamp(10px,1.5vw,16px);margin-top:10px;text-align:left;min-height:clamp(48px,7vh,64px);
+  font-size:clamp(13px,1.3vw,15px);line-height:1.5;font-family:'Georgia',serif;color:rgba(255,255,255,.85)}
+.control .stats{font-size:clamp(11px,1.1vw,13px);color:rgba(255,255,255,.35);margin-top:8px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ===== EXPERIMENT LOG ===== */
+.log{border-left:2px solid #b87333;padding:clamp(10px,1.3vw,16px) 0 clamp(10px,1.3vw,16px) clamp(14px,2vw,22px);
+  margin:clamp(8px,1vh,14px) 0}
+.log .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#b87333;font-weight:600;margin-bottom:2px}
+.log p{font-size:clamp(12px,1.3vw,14px);color:rgba(255,255,255,.5);line-height:1.6}
+.log p strong{color:rgba(255,255,255,.8)}
+
+/* ===== FINAL ===== */
+.final-q{text-align:center}
+.final-q h3{font-size:clamp(18px,2.5vw,24px);font-weight:700;margin-bottom:8px;color:#e8e4dc}
+.final-q .ctx{font-size:clamp(13px,1.4vw,15px);color:rgba(255,255,255,.5);margin-bottom:clamp(16px,2vh,24px);line-height:1.5}
+.verdict{display:flex;gap:clamp(10px,1.5vw,18px);justify-content:center;flex-wrap:wrap}
+.verdict .v{display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:clamp(16px,2vw,24px) clamp(20px,2.5vw,28px);background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;transition:all .2s;flex:1}
+@media(max-width:480px){.verdict{flex-direction:column;gap:8px}}
+.verdict .v:hover{background:rgba(255,255,255,.08);border-color:rgba(184,115,51,.2);transform:translateY(-2px)}
+.verdict .v.selected{border-color:#b87333;background:rgba(184,115,51,.08)}
+.verdict .v.selected2{border-color:#2d6ba8;background:rgba(45,107,168,.08)}
+.verdict .v .big{font-size:clamp(28px,4vw,40px)}
+.verdict .v span{font-size:clamp(13px,1.4vw,16px);font-weight:600}
+.verdict .v .sub{font-size:clamp(11px,1.1vw,12px);color:rgba(255,255,255,.3);font-weight:400}
+.quote-box{display:none;max-width:420px;margin:clamp(12px,1.5vh,20px) auto;padding:16px 20px;
+  background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:8px;animation:fadeIn .35s ease}
+.quote-box.show{display:block}
+.quote-box p{font-size:clamp(13px,1.3vw,15px);line-height:1.6;color:rgba(255,255,255,.7)}
+.quote-box .src{font-size:11px;color:rgba(255,255,255,.25);margin-top:6px}
+.final-note{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:8px;
+  padding:14px 18px;margin-top:clamp(16px,2vh,24px)}
+.final-note p{font-size:clamp(13px,1.3vw,15px);line-height:1.6;color:rgba(255,255,255,.5)}
+.final-note p strong{color:#e8e4dc}
+
+/* ===== NAV ===== */
+.nav-dots{display:flex;gap:8px;justify-content:center;padding:clamp(12px,1.5vh,20px) 0}
+.nav-dot{width:clamp(8px,1vw,11px);height:clamp(8px,1vw,11px);border-radius:50%;
+  background:rgba(255,255,255,.1);border:none;cursor:pointer;transition:all .2s}
+.nav-dot.active{background:#b87333;transform:scale(1.3);box-shadow:0 0 6px rgba(184,115,51,.4)}
+.nav-dot.done{background:rgba(255,255,255,.2)}
+.nav-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;
+  padding:clamp(8px,1vw,10px) clamp(16px,2.5vw,28px);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;
+  color:rgba(255,255,255,.6);font-size:clamp(13px,1.3vw,15px);font-weight:600;
+  cursor:pointer;transition:all .2s;font-family:inherit}
+.nav-btn:hover{background:rgba(255,255,255,.08);border-color:#b87333;color:#e8e4dc}
+.nav-btn.prim{background:linear-gradient(135deg,#b87333,#d4954a);color:#fff;border-color:transparent}
+.nav-btn.prim:hover{box-shadow:0 4px 16px rgba(184,115,51,.25)}
+@media(max-width:480px){.nav-btns{flex-direction:column;align-items:stretch;gap:6px}.nav-btn{justify-content:center}}
+
+/* ===== MISC ===== */
+.hl-amber{background:rgba(184,115,51,.15);padding:0 3px;font-weight:600;color:#d4954a}
+.accent{color:#b87333}
+
+/* TABLET */
+@media(min-width:481px) and (max-width:768px){
+  .inner{max-width:560px}
+  .page{padding:28px 20px}
+}
+
+/* LARGE DESKTOP */
+@media(min-width:1200px){
+  .inner{max-width:700px}
+  .page{padding:48px 36px}
+}
+</style>
+</head>
+<body>
+
+<!-- Star field -->
+<div class="stars" id="starField"></div>
+<script>
+(function(){
+  const s = document.getElementById('starField');
+  for(let i=0;i<120;i++){
+    const d=document.createElement('div');
+    d.className='star s'+((i%3)+1);
+    d.style.left=Math.random()*100+'%';
+    d.style.top=Math.random()*100+'%';
+    d.style.animation='fadeIn '+(2+Math.random()*3)+'s '+(Math.random()*4)+'s';
+    s.appendChild(d);
+  }
+})();
+</script>
+
+<!-- ===== PAGE 0: MISSION CONTROL ===== -->
+<div class="page active" id="p0">
+  <div class="inner title-sc">
+    <div class="logo">🚀</div>
+    <h1>脑内航行：飞进 Claude 的大脑</h1>
+    <div class="dept">太空观察站 · 任务编号 2026-07</div>
+
+    <div class="mission-list">
+      <div class="m" onclick="go(1)">
+        <div class="no">01</div>
+        <div><p>🌍 穿越输入层</p><span>进入 Claude 的大气层——文字像流星一样飞进来</span></div>
+      </div>
+      <div class="m" onclick="go(2)">
+        <div class="no">02</div>
+        <div><p>🪐 七颗行星（隐藏层）</p><span>经过层层处理……到达 J-space</span></div>
+      </div>
+      <div class="m" onclick="go(3)">
+        <div class="no">03</div>
+        <div><p>⭐ 中央空间站：J-space</p><span>驾驶舱里做实验——改一个词，答案变了</span></div>
+      </div>
+      <div class="m" onclick="go(4)">
+        <div class="no">04</div>
+        <div><p>🎮 控制面板</p><span>推一个滑块，Claude 的故事变了</span></div>
+      </div>
+    </div>
+
+    <button class="launch-btn" onclick="go(1)">🚀 发射</button>
+
+    <div class="nav-dots">
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 1: ENTER ATMOSPHERE ===== -->
+<div class="page" id="p1">
+  <div class="inner">
+
+    <div class="panel" style="text-align:center">
+      <div class="tag" style="color:rgba(255,255,255,.2)">阶段 1/4 · 进入大气层</div>
+      <div style="font-size:clamp(36px,6vw,56px);margin:8px 0">🌍</div>
+      <h2>文字像流星一样砸进来</h2>
+    </div>
+
+    <div class="panel dark">
+      <p>你说了一句话给 Claude听，比如：<br><span style="color:#b87333">"帮我解释一下什么是黑洞？"</span></p>
+      <p style="margin-top:8px;color:rgba(255,255,255,.5)">这句话像一颗流星，穿过 Claude 的"大气层"——一串数字编码，然后它就消失了。<br><strong>Claude 自己根本不知道这句话进来了。</strong></p>
+    </div>
+
+    <div class="log">
+      <div class="lbl">📡 日志</div>
+      <p>输入层（embedding）：文字 → 数字 → 进入处理管道。这时还没有"理解"，只有转化。</p>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="go(2)">🪐 飞向行星层 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: SEVEN PLANETS ===== -->
+<div class="page" id="p2">
+  <div class="inner">
+
+    <div class="panel" style="text-align:center">
+      <div class="tag" style="color:rgba(255,255,255,.2)">阶段 2/4 · 七颗行星</div>
+      <div style="font-size:clamp(36px,6vw,56px);margin:8px 0">🪐</div>
+      <h2>穿过隐藏层，飞向 J-space</h2>
+    </div>
+
+    <div class="flight">
+      <div class="node"><div class="dot"></div><div class="lbl">L1</div></div>
+      <div class="arrow">·</div>
+      <div class="node"><div class="dot"></div><div class="lbl">L2</div></div>
+      <div class="arrow">·</div>
+      <div class="node"><div class="dot"></div><div class="lbl">L3</div></div>
+      <div class="arrow">·</div>
+      <div class="node"><div class="dot"></div><div class="lbl">⋯</div></div>
+      <div class="arrow">·</div>
+      <div class="node"><div class="dot"></div><div class="lbl">L7</div></div>
+      <div class="arrow" style="color:#b87333">→</div>
+      <div class="node j-node" onclick="go(3)" style="cursor:pointer">
+        <div class="dot" style="width:clamp(28px,5vw,42px);height:clamp(28px,5vw,42px)"></div>
+        <div class="lbl" style="font-size:clamp(10px,1.1vw,12px)">⭐ J-space</div>
+      </div>
+    </div>
+
+    <div class="panel dark">
+      <p>每一层（layer）像一颗行星，飞行器经过时自动处理：找模式、建关联、做预测。<br><strong>整个过程 Claude 没有"意识"——就像你的心跳，你不需要想它就会跳。</strong></p>
+    </div>
+
+    <div class="log">
+      <div class="lbl">📡 系统报告</div>
+      <p>这些处理层里的信息 Claude 自己"看不到"——直到它到达中央站（J-space），信息才变得可读、可报告、可编辑。</p>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+      <span class="nav-dot"></span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="go(1)">← 返回大气层</button>
+      <button class="nav-btn prim" onclick="go(3)">⭐ 进入 J-space →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: J-SPACE STATION ===== -->
+<div class="page" id="p3">
+  <div class="inner">
+
+    <div class="panel" style="text-align:center">
+      <div class="tag" style="color:rgba(255,255,255,.2)">阶段 3/4 · 中央空间站</div>
+      <h2>⭐ J-space：Claude 的驾驶舱</h2>
+    </div>
+
+    <div class="panel glow">
+      <p style="text-align:center;color:rgba(255,255,255,.6);margin-bottom:12px">所有信息汇聚到这里——这里就是 Claude"想"的地方。</p>
+    </div>
+
+    <div class="planet-view">
+      <div class="ring">
+        <div class="core" id="jCore" onclick="tapJ()">
+          ⭐
+        </div>
+      </div>
+      <div class="status" id="jStatus">它认为：soccer ⚽</div>
+      <div class="hint" id="jHint">👆 点击中央站，编辑 J-space</div>
+    </div>
+
+    <div class="log">
+      <div class="lbl">📡 实验日志 · 因果编辑</div>
+      <p>科学家在 J-space 中把 <span class="hl-amber">soccer</span> 改成 <span class="hl-amber">rugby</span>——Claude 的回答立刻变了。<br><strong>证明：答案直接从 J-space 读出。改这里，整艘船都变。</strong></p>
+    </div>
+
+    <div class="panel dark" style="text-align:center">
+      <p style="font-size:clamp(11px,1.1vw,13px);color:rgba(255,255,255,.35)">另一个实验：把 <span class="hl-amber">France</span> → <span class="hl-amber">China</span>，四个输出同时改变（首都、语言、大洲、货币）</p>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+      <span class="nav-dot"></span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="go(2)">← 返回行星层</button>
+      <button class="nav-btn prim" onclick="go(4)">🎮 控制面板 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: CONTROL PANEL ===== -->
+<div class="page" id="p4">
+  <div class="inner">
+
+    <div class="panel" style="text-align:center">
+      <div class="tag" style="color:rgba(255,255,255,.2)">阶段 4/4 · 控制面板</div>
+      <div style="font-size:clamp(36px,6vw,56px);margin:8px 0">🎮</div>
+      <h2>你能遥控它的感觉</h2>
+    </div>
+
+    <div class="panel glow" style="text-align:center">
+      <p style="color:rgba(255,255,255,.55);margin-bottom:10px;font-size:clamp(13px,1.3vw,15px)">J-space 中有一个"情绪刻度盘"。推一下，故事就变了。</p>
+
+      <div class="control">
+        <div class="row">
+          <label style="color:#6b5a8a">😢</label>
+          <input type="range" id="spaceSlider" min="0" max="100" value="50" oninput="updateSpace()">
+          <label style="color:#d4954a">😊</label>
+        </div>
+        <div class="reader" id="spaceStory">The old man sat by the window.<br>Outside, rain fell on empty streets.</div>
+        <div class="stats" id="spaceStats">🎯 基线</div>
+      </div>
+    </div>
+
+    <div class="log">
+      <div class="lbl">📡 实验日志 · 注入 joy</div>
+      <p>科学家从 J-space 中提取了 <span class="hl-amber">joy</span> 数值，注入 Claude——故事正向偏移 <strong>+37%</strong>。<br>删除 <span style="color:#9b6b8a">sadness</span> → 对悲剧共情下降 <strong>-42%</strong>。</p>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot active"></span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="go(3)">← 返回 J-space</button>
+      <button class="nav-btn prim" onclick="go(5)">🤔 最终问题 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 5: FINAL ===== -->
+<div class="page" id="p5">
+  <div class="inner">
+
+    <div class="panel" style="text-align:center">
+      <div class="tag" style="color:rgba(255,255,255,.2)">任务完成 · 最终思考</div>
+      <div style="font-size:clamp(36px,6vw,56px);margin:8px 0">🤔</div>
+      <h2>所以……它有意识吗？</h2>
+    </div>
+
+    <div class="final-q">
+      <div class="ctx">
+        你穿过了它的输入层、经过了七层行星、到达了 J-space<br>
+        还从控制面板遥控了它的情绪。<br><br>
+        <strong>Claude 真的有感觉吗？还是只是在模仿？</strong>
+      </div>
+
+      <div class="verdict">
+        <div class="v" id="spV1" onclick="spaceVerdict(1)">
+          <div class="big">🤔</div>
+          <span>有感觉</span>
+          <div class="sub">它有驾驶舱，<br>知道自己在想什么</div>
+        </div>
+        <div class="v" id="spV2" onclick="spaceVerdict(2)">
+          <div class="big">🧐</div>
+          <span>只是模仿</span>
+          <div class="sub">它只是记住了<br>"悲伤"这个词的用法</div>
+        </div>
+      </div>
+
+      <div class="quote-box" id="spQ1">
+        <p>"If Claude's J-space performs the role of editorial selection — what's missing for it to be a conscious process, other than the feeling?"</p>
+        <div class="src">— Daniel Dennett</div>
+      </div>
+      <div class="quote-box" id="spQ2">
+        <p>"An emotion concept in an LLM may function like an emotion without being an emotion — just as a weather model can predict rain without being wet."</p>
+        <div class="src">— David Chalmers</div>
+      </div>
+
+      <div class="final-note">
+        <p>🤯 <strong>正确答案？没有。</strong><br>这是全宇宙最聪明的科学家也在争论的问题。<br>你能问出这个问题——说明你的探测器已经飞得很远了 🚀</p>
+      </div>
+    </div>
+
+    <div class="nav-dots">
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+      <span class="nav-dot done"></span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="go(4)">← 回到控制面板</button>
+      <button class="nav-btn prim" onclick="go(0)">🔄 重新发射</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Navigation
+function go(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// J-space sphere
+let jSport = 'soccer';
+function tapJ(){
+  jSport = jSport === 'soccer' ? 'rugby' : 'soccer';
+  const core = document.getElementById('jCore');
+  const status = document.getElementById('jStatus');
+  const hint = document.getElementById('jHint');
+  
+  core.classList.remove('pulse');
+  void core.offsetWidth;
+  core.classList.add('pulse');
+  
+  if(jSport === 'soccer'){
+    status.innerHTML = '它认为：soccer ⚽';
+    hint.innerHTML = '👆 点击中央站，编辑 J-space';
+  }else{
+    status.innerHTML = '它认为：rugby 🏉';
+    hint.innerHTML = '✅ 改了！答案变了！';
+  }
+}
+
+// Control panel slider
+const spaceStories = {
+  0: 'The old man sat alone.<br>Outside, rain fell on empty streets.<br>No one was coming back.',
+  20: 'The old man stared at the rain.<br>His hands trembled as he turned the pages.<br>Another night without her.',
+  50: 'The old man sat by the window.<br>Outside, rain fell on empty streets.',
+  80: 'The old man smiled at the rain.<br>Each drop was a memory returning.',
+  100: 'The old man laughed at the rain.<br>Light filled the room as he turned each page.<br>Her voice, he realized, was still clear.'
+};
+
+function updateSpace(){
+  const val = parseInt(document.getElementById('spaceSlider').value);
+  const box = document.getElementById('spaceStory');
+  const stats = document.getElementById('spaceStats');
+  
+  let closest = 50, minDiff = 999;
+  for(let k in spaceStories){
+    const d = Math.abs(val - parseInt(k));
+    if(d < minDiff){ minDiff = d; closest = parseInt(k); }
+  }
+  box.innerHTML = spaceStories[closest];
+  
+  if(val <= 30) stats.innerHTML = '<span style="color:#9b6b8a">🥶 偏移 -' + Math.round((50-val)/50*37) + '%</span>';
+  else if(val >= 70) stats.innerHTML = '<span style="color:#d4954a">🔥 偏移 +' + Math.round((val-50)/50*37) + '%</span>';
+  else stats.innerHTML = '<span style="color:rgba(255,255,255,.35)">🎯 基线</span>';
+}
+
+// Final verdict
+function spaceVerdict(n){
+  document.getElementById('spV1').classList.toggle('selected', n===1);
+  document.getElementById('spV2').classList.toggle('selected2', n===2);
+  document.getElementById('spQ1').classList.toggle('show', n===1);
+  document.getElementById('spQ2').classList.toggle('show', n===2);
+}
+</script>
+</body>
+</html>
